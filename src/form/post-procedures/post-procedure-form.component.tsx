@@ -46,17 +46,7 @@ const validationSchema = z.object({
   endDatetime: z.date({ required_error: "End datetime is required" }),
   outcome: z.string({ required_error: "Outcome is required" }),
   procedureReport: z.string({ required_error: "Procedure report is required" }),
-  participants: z.array(
-    z.object({
-      uuid: z.string(),
-      display: z.string(),
-      person: z.object({
-        uuid: z.string(),
-        display: z.string(),
-      }),
-    }),
-    { required_error: "Participants are required" }
-  ),
+  participants: z.string().optional(),
   complications: z.string().optional(),
 });
 
@@ -136,7 +126,7 @@ const PostProcedureForm: React.FC<PostProcedureFormProps> = ({
     const participants = [];
     if (selectedProvider) {
       const provider = {
-        provider: selectedProvider.concept.uuid,
+        provider: selectedProvider.uuid,
         encounterRole: encounterRole,
       };
       participants.push(provider);
@@ -353,7 +343,7 @@ const PostProcedureForm: React.FC<PostProcedureFormProps> = ({
                       <li
                         role="menuitem"
                         className={styles.condition}
-                        key={searchResult?.concept?.uuid}
+                        key={searchResult?.uuid}
                         onClick={() => handleProviderChange(searchResult)}
                       >
                         {searchResult.display}
